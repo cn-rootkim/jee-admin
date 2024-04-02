@@ -1,0 +1,25 @@
+{
+  "name": "jee-admin",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vueup/vue-quill": "^1.0.0-alpha.40",
+    "axios": "^1.6.8",
+    "crypto-js": "^4.2.0",
+    "element-plus": "^2.6.1",
+    "save": "^2.9.0",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "sass": "^1.72.0",
+    "vite": "^5.1.6"
+  }
+}
