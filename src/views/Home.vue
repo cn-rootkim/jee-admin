@@ -24,47 +24,60 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted,ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import adminMenuApi from "../api/admin/adminMenu.js";
 import adminMenuFunctionApi from "../api/admin/adminMenuFunction";
 import sysUserApi from '../api/sys/sysUser.js';
 import router from "../router/index.js";
-import { ElMessage } from 'element-plus'
+import {ElMessage} from 'element-plus'
 import recursionMenu from '../components/RecursionMenu.vue';
+
 const handleSelect = (index) => {
-  recursionRouter(adminMenuData.value,index);
+  recursionRouter(adminMenuData.value, index);
 };
-const recursionRouter = (adminMenuList,index) => {
+const recursionRouter = (adminMenuList, index) => {
   adminMenuList.forEach((item) => {
     if (item.index == index) {
-      loadFunNameListAuthorized(item.id,item.path);
+      loadFunctionList(item.id, item.path);
     } else {
       if (item.childList != null) {
-        recursionRouter(item.childList,index);
+        recursionRouter(item.childList, index);
       }
     }
   });
 };
-const loadFunNameListAuthorized = async (adminMenuId,path) =>{
-  const nameListAuthorized = await adminMenuFunctionApi.nameListAuthorized({adminMenuId: adminMenuId});
-  sessionStorage.setItem("funNameListAuthorized",JSON.stringify(nameListAuthorized.data));
+const loadFunctionList = async (adminMenuId, path) => {
+  const functionList = await adminMenuFunctionApi.list({mode: 2, adminMenuId: adminMenuId});
+  sessionStorage.setItem("functionList", JSON.stringify(functionList.data));
   router.push({path: path});
 }
 const adminMenuData = ref(null);
 const fetchAdminMenuData = async () => {
-  const adminMenu = await adminMenuApi.listTreeAuthorized();
-  recursionSetIndex(null,adminMenu.data);
+  const adminMenu = await adminMenuApi.listTree({mode: 2});
+  recursionRmNoAuth(adminMenu.data)
+  recursionSetIndex(null, adminMenu.data);
   adminMenuData.value = await adminMenu.data;
 };
+const recursionRmNoAuth = (adminMenuList) => {
+  for (let i = 0; i < adminMenuList.length; i++) {
+    if (adminMenuList[i].isAuth == null || !adminMenuList[i].isAuth) {
+      adminMenuList.splice(adminMenuList.indexOf(adminMenuList[i]), 1);
+    } else {
+      if(adminMenuList[i].childList!=null){
+        recursionRmNoAuth(adminMenuList[i].childList);
+      }
+    }
+  }
+};
 const recursionSetIndex = (parentAdminMenu, adminMenuList) => {
-  for(let i = 0; i < adminMenuList.length; i++){
-    if(parentAdminMenu==null){
+  for (let i = 0; i < adminMenuList.length; i++) {
+    if (parentAdminMenu == null) {
       adminMenuList[i].index = i + 1;
-    }else{
+    } else {
       adminMenuList[i].index = parentAdminMenu.index + '-' + (i + 1);
     }
-    if(adminMenuList[i].childList != null){
-      recursionSetIndex(adminMenuList[i],adminMenuList[i].childList);
+    if (adminMenuList[i].childList != null) {
+      recursionSetIndex(adminMenuList[i], adminMenuList[i].childList);
     }
   }
 };

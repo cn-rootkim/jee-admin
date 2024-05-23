@@ -122,11 +122,11 @@ import sysApiBasePath from '../../api/sys/sysApiBasePath.js'
 const treeData = ref([]);
 const refListTree = ref()
 const defaultProps = {
-  children: 'sysApiDTOList',
+  children: 'sysApiBOList',
   label: 'api',
 }
 const fetchData = async() => {
-  const sysApiBasePathList = await sysApiBasePath.listWithApiList();
+  const sysApiBasePathList = await sysApiBasePath.list({'isNeedApiList':true});
   sysApiBasePathList.data.forEach(item => {
     item.api = item.basePath;
   })
@@ -137,23 +137,25 @@ const onAddSysApiDisabled = ref(true);
 const onDeleteDisabled = ref(true);
 const onUpdateDisabled = ref(true);
 onMounted(() => {
-  const funNameListAuthorizedStr = sessionStorage.getItem("funNameListAuthorized");
-  if(funNameListAuthorizedStr!=null && funNameListAuthorizedStr!=''){
-    const funNameListAuthorized = JSON.parse(funNameListAuthorizedStr);
-    funNameListAuthorized.forEach(item =>{
-      switch (item) {
-        case '新增父路径':
-          onAddSysApiBasePathDisabled.value = false;
-          break;
-        case '新增接口':
-          onAddSysApiDisabled.value = false;
-          break;
-        case '删除':
-          onDeleteDisabled.value = false;
-          break;
-        case '修改':
-          onUpdateDisabled.value = false;
-          break;
+  const functionListStr = sessionStorage.getItem("functionList");
+  if (functionListStr != null && functionListStr != '') {
+    const functionList = JSON.parse(functionListStr);
+    functionList.forEach(item => {
+      if (item.isAuth) {
+        switch (item.name) {
+          case '新增父路径':
+            onAddSysApiBasePathDisabled.value = false;
+            break;
+          case '新增接口':
+            onAddSysApiDisabled.value = false;
+            break;
+          case '删除':
+            onDeleteDisabled.value = false;
+            break;
+          case '修改':
+            onUpdateDisabled.value = false;
+            break;
+        }
       }
     })
   }

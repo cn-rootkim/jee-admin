@@ -9,9 +9,9 @@ const batchDelete = (data) => {
 const update = (data) => {
     return http.post('/sysApiBasePath/update', data)
 }
-const listWithApiList = () => {
-    return http.post('/sysApiBasePath/listWithApiList', null)
+const list = (data) => {
+    return http.post('/sysApiBasePath/list', data)
 }
 export default {
-    add,batchDelete,update,listWithApiList
+    add,batchDelete,update,list
 }

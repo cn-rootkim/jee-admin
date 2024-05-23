@@ -12,17 +12,9 @@ const update = (data) => {
 const list = (data) => {
     return http.post('/adminMenuFunction/list', data)
 }
-const idListAuthorized = (data) => {
-    return http.post('/adminMenuFunction/idListAuthorized', data)
-}
-const nameListAuthorized = (data) => {
-    return http.post('/adminMenuFunction/nameListAuthorized', data)
-}
 export default {
     add,
     batchDelete,
     update,
     list,
-    idListAuthorized,
-    nameListAuthorized
 }

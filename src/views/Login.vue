@@ -50,7 +50,7 @@ const onSubmit = () => {
     if(!ruleFormRef) return;
     ruleFormRef.value.validate(async (valid) => {
         if (valid) {
-            const res = await sysUserApi.login(form);
+            const res = await sysUserApi.loginByUsernameAndPassword(form);
             ElMessage.success("登录成功");
             localStorage.setItem("token", res.data.token);
             window.location.href = "/home";

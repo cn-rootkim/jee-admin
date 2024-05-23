@@ -2,7 +2,8 @@ import axios from "axios";
 import { ElMessage,ElLoading } from "element-plus";
 //1.创建axios实例
 const instance = axios.create({
-  baseURL: "http://localhost:8080/jee-monomer",
+  // baseURL: "http://localhost:9000/base-service",
+    baseURL: "http://localhost:9001",
   timeout: 50000,
 });
 
@@ -12,7 +13,7 @@ let loadingInstance = null;
 instance.interceptors.request.use(
     (config) => {
         loadingInstance = ElLoading.service({ fullscreen: true,background: 'rgba(0, 0, 0, 0.7)', })
-    if (config.url === "/sysUser/login") {
+    if (config.url === "/sysUser/loginByUsernameAndPassword") {
         return config;
     }
     let token = localStorage.getItem("token");

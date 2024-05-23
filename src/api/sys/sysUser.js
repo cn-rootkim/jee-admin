@@ -18,13 +18,13 @@ const page = (data) => {
 const info = (data) => {
     return http.post('/sysUser/info', data)
 }
-const login = (data) => {
+const loginByUsernameAndPassword = (data) => {
     data.password = Encrypt(data.password)
-    return http.post('/sysUser/login', data)
+    return http.post('/sysUser/loginByUsernameAndPassword', data)
 }
 const logout = () => {
     return http.post('/sysUser/logout')
 }
 export default {
-    add,batchDelete,update,page,info,login,logout
+    add,batchDelete,update,page,info,loginByUsernameAndPassword,logout
 }

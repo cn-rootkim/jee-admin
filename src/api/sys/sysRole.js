@@ -15,15 +15,15 @@ const page = (data) => {
 const list = () => {
     return http.post('/sysRole/list', null)
 }
-const authAdminMenu = (data) => {
-    return http.post('/sysRole/authAdminMenu', data)
+const authMenu = (data) => {
+    return http.post('/sysRole/authMenu', data)
 }
-const authAdminMenuFunction = (data) => {
-    return http.post('/sysRole/authAdminMenuFunction', data)
+const authMenuFunction = (data) => {
+    return http.post('/sysRole/authMenuFunction', data)
 }
-const authSysApi = (data) => {
-    return http.post('/sysRole/authSysApi', data)
+const authApi = (data) => {
+    return http.post('/sysRole/authApi', data)
 }
 export default {
-    add,batchDelete,update,page,list,authAdminMenu,authAdminMenuFunction,authSysApi
+    add,batchDelete,update,page,list,authMenu,authMenuFunction,authApi
 }

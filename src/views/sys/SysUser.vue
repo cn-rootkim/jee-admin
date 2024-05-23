@@ -1,6 +1,6 @@
 <template>
   <el-main>
-    <el-form :inline="true" style="text-align: left;" :model="formData" ref="formRef" >
+    <el-form :inline="true" style="text-align: left;" :model="formData" ref="formRef">
       <el-form-item label="用户名">
         <el-input clearable v-model="formData.username" style="width: 170px;"/>
       </el-form-item>
@@ -8,9 +8,9 @@
         <el-input clearable v-model="formData.name" style="width: 170px;"/>
       </el-form-item>
       <el-form-item label="账号状态">
-        <el-select clearable  style="width: 170px;" v-model="formData.isEnabled">
-          <el-option label="启用" value="0" />
-          <el-option label="禁用" value="1" />
+        <el-select clearable style="width: 170px;" v-model="formData.isEnabled">
+          <el-option label="启用" value="0"/>
+          <el-option label="禁用" value="1"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -29,17 +29,18 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" />
-      <el-table-column property="username" label="用户名" width="220" />
-      <el-table-column property="name" label="姓名" width="220" />
+      <el-table-column type="selection" width="55"/>
+      <el-table-column property="username" label="用户名" width="220"/>
+      <el-table-column property="name" label="姓名" width="220"/>
       <el-table-column property="isEnabled" label="账号状态"/>
-      <el-table-column property="createTime" label="创建时间" />
-      <el-table-column property="createrName" label="创建人" />
+      <el-table-column property="createTime" label="创建时间"/>
+      <el-table-column property="createrName" label="创建人"/>
       <el-table-column property="updateTime" label="修改时间"/>
-      <el-table-column property="updaterName" label="修改人" />
+      <el-table-column property="updaterName" label="修改人"/>
     </el-table>
     <el-pagination style="margin-top: 10px;" :current-page="currentPage" :page-size="pageSize"
-                   background layout="total, prev, pager, next, jumper" :total="total" @current-change="handleCurrentChange"/>
+                   background layout="total, prev, pager, next, jumper" :total="total"
+                   @current-change="handleCurrentChange"/>
 
     <el-dialog v-model="dialogAddVisible" title="新增" width="500" destroy-on-close :close-on-click-modal="false">
       <el-form :model="addFormData" style="margin-left: 60px" :rules="addRules" ref="addRuleFormRef">
@@ -53,14 +54,14 @@
           <el-input v-model="addFormData.name" autocomplete="off" style="width: 200px;"/>
         </el-form-item>
         <el-form-item label="账号状态" :label-width="addFormLabelWidth" prop="isEnabled">
-          <el-select clearable  style="width: 200px;" v-model="addFormData.isEnabled">
-            <el-option label="启用" value="0" />
-            <el-option label="禁用" value="1" />
+          <el-select clearable style="width: 200px;" v-model="addFormData.isEnabled">
+            <el-option label="启用" value="0"/>
+            <el-option label="禁用" value="1"/>
           </el-select>
         </el-form-item>
         <el-form-item label="角色" :label-width="addFormLabelWidth" prop="roleIdList">
           <el-select clearable style="width: 200px;" v-model="addFormData.roleIdList" multiple>
-            <el-option v-for="role in roleList" :label="role.name" :value="role.id" />
+            <el-option v-for="role in roleList" :label="role.name" :value="role.id"/>
           </el-select>
         </el-form-item>
       </el-form>
@@ -82,14 +83,14 @@
           <el-input v-model="updateFormData.name" autocomplete="off" style="width: 200px;"/>
         </el-form-item>
         <el-form-item label="账号状态" :label-width="updateFormLabelWidth" prop="isEnabled">
-          <el-select clearable  style="width: 200px;" v-model="updateFormData.isEnabled">
-            <el-option label="启用" value="0" />
-            <el-option label="禁用" value="1" />
+          <el-select clearable style="width: 200px;" v-model="updateFormData.isEnabled">
+            <el-option label="启用" value="0"/>
+            <el-option label="禁用" value="1"/>
           </el-select>
         </el-form-item>
         <el-form-item label="角色" :label-width="updateFormLabelWidth" prop="roleIdList">
-          <el-select clearable  style="width: 200px;" v-model="updateFormData.roleIdList" multiple>
-            <el-option v-for="role in roleList" :label="role.name" :value="role.id" />
+          <el-select clearable style="width: 200px;" v-model="updateFormData.roleIdList" multiple>
+            <el-option v-for="role in roleList" :label="role.name" :value="role.id"/>
           </el-select>
         </el-form-item>
       </el-form>
@@ -102,13 +103,16 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="dialogUpdatePassWordVisible" title="修改密码" width="500" destroy-on-close :close-on-click-modal="false">
-      <el-form :model="updatePassWordFormData" style="margin-left: 60px" :rules="updatePassWordRules" ref="updatePassWordRuleFormRef">
+    <el-dialog v-model="dialogUpdatePassWordVisible" title="修改密码" width="500" destroy-on-close
+               :close-on-click-modal="false">
+      <el-form :model="updatePassWordFormData" style="margin-left: 60px" :rules="updatePassWordRules"
+               ref="updatePassWordRuleFormRef">
         <el-form-item label="密码" :label-width="updatePassWordFormLabelWidth" prop="password">
           <el-input v-model="updatePassWordFormData.password" autocomplete="off" style="width: 200px;" type="password"/>
         </el-form-item>
         <el-form-item label="确认密码" :label-width="updatePassWordFormLabelWidth" prop="confirmPassword">
-          <el-input v-model="updatePassWordFormData.confirmPassword" autocomplete="off" style="width: 200px;" type="password"/>
+          <el-input v-model="updatePassWordFormData.confirmPassword" autocomplete="off" style="width: 200px;"
+                    type="password"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -125,7 +129,7 @@
 
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
-import { ElTable,ElForm,ElMessage,ElMessageBox } from 'element-plus'
+import {ElTable, ElForm, ElMessage, ElMessageBox} from 'element-plus'
 import sysUserApi from "../../api/sys/sysUser.js";
 import sysRoleApi from "../../api/sys/sysRole.js";
 
@@ -140,7 +144,7 @@ interface SysUser {
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<SysUser[]>([]);
-const tableData =ref();
+const tableData = ref();
 const formData = ref({
   username: null,
   name: null,
@@ -157,16 +161,16 @@ const updateFormLabelWidth = ref('80px');
 const updatePassWordFormLabelWidth = ref('80px');
 const addRuleFormRef = ref();
 const addRules = reactive({
-  username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-  password: [{ required: true, message: "请输入密码", trigger: "blur" }],
-  isEnabled: [{ required: true, message: "请选择账号状态", trigger: "blur" }],
-  roleIdList: [{ required: true, message: "请选择角色", trigger: "blur" }],
+  username: [{required: true, message: "请输入用户名", trigger: "blur"}],
+  password: [{required: true, message: "请输入密码", trigger: "blur"}],
+  isEnabled: [{required: true, message: "请选择账号状态", trigger: "blur"}],
+  roleIdList: [{required: true, message: "请选择角色", trigger: "blur"}],
 });
 const updateRuleFormRef = ref();
 const updateRules = reactive({
-  username: [{ required: true, message: "请输入账号", trigger: "blur" }],
-  isEnabled: [{ required: true, message: "请选择账号状态", trigger: "blur" }],
-  roleIdList: [{ required: true, message: "请选择角色", trigger: "blur" }],
+  username: [{required: true, message: "请输入账号", trigger: "blur"}],
+  isEnabled: [{required: true, message: "请选择账号状态", trigger: "blur"}],
+  roleIdList: [{required: true, message: "请选择角色", trigger: "blur"}],
 });
 const updatePassWordRuleFormRef = ref();
 const validateConfirmPassword = (rule: any, value: any, callback: any) => {
@@ -179,11 +183,10 @@ const validateConfirmPassword = (rule: any, value: any, callback: any) => {
   }
 }
 const updatePassWordRules = reactive({
-  password: [{ required: true, message: "请输入密码", trigger: "blur" }],
-  confirmPassword: [{ required: true, trigger: "blur", validator: validateConfirmPassword}],
+  password: [{required: true, message: "请输入密码", trigger: "blur"}],
+  confirmPassword: [{required: true, trigger: "blur", validator: validateConfirmPassword}],
 });
 const addFormData = ref<SysUser>({
-  id: null,
   username: null,
   password: null,
   name: null,
@@ -205,8 +208,14 @@ const handleSelectionChange = (val: SysUser[]) => {
   multipleSelection.value = val
 }
 
-const fetchListData = async (current:number) => {
-  const listData = await sysUserApi.page({current: current, size: pageSize.value, username: formData.value.username, name: formData.value.name, isEnabled: formData.value.isEnabled});
+const fetchListData = async (current: number) => {
+  const listData = await sysUserApi.page({
+    current: current,
+    size: pageSize.value,
+    username: formData.value.username,
+    name: formData.value.name,
+    isEnabled: formData.value.isEnabled
+  });
   // console.log(listData);
   listData.data.records.forEach((item: any) => {
     item.isEnabled = item.isEnabled == 0 ? '启用' : '禁用';
@@ -220,23 +229,25 @@ const onDeleteDisabled = ref(true);
 const onUpdateDisabled = ref(true);
 const onUpdatePassWordDisabled = ref(true);
 onMounted(() => {
-  const funNameListAuthorizedStr = sessionStorage.getItem("funNameListAuthorized");
-  if(funNameListAuthorizedStr!=null && funNameListAuthorizedStr!=''){
-    const funNameListAuthorized = JSON.parse(funNameListAuthorizedStr);
-    funNameListAuthorized.forEach(item =>{
-      switch (item) {
-        case '新增':
-          onAddDisabled.value = false;
-          break;
-        case '删除':
-          onDeleteDisabled.value = false;
-          break;
-        case '修改':
-          onUpdateDisabled.value = false;
-          break;
-        case '修改密码':
-          onUpdatePassWordDisabled.value = false;
-          break;
+  const functionListStr = sessionStorage.getItem("functionList");
+  if (functionListStr != null && functionListStr != '') {
+    const functionList = JSON.parse(functionListStr);
+    functionList.forEach(item => {
+      if (item.isAuth) {
+        switch (item.name) {
+          case '新增':
+            onAddDisabled.value = false;
+            break;
+          case '删除':
+            onDeleteDisabled.value = false;
+            break;
+          case '修改':
+            onUpdateDisabled.value = false;
+            break;
+          case '修改密码':
+            onUpdatePassWordDisabled.value = false;
+            break;
+        }
       }
     })
   }
@@ -267,10 +278,10 @@ const onAdd = () => {
 }
 
 const onUpdate = async () => {
-  if(multipleSelection.value.length == 0){
+  if (multipleSelection.value.length == 0) {
     ElMessage.warning('请选择一条数据');
     return;
-  }else if(multipleSelection.value.length > 1){
+  } else if (multipleSelection.value.length > 1) {
     ElMessage.warning('只能选择一条数据');
     return;
   }
@@ -282,19 +293,19 @@ const onUpdate = async () => {
 }
 
 const onUpdatePassWord = () => {
-  if(multipleSelection.value.length == 0){
+  if (multipleSelection.value.length == 0) {
     ElMessage.warning('请选择一条数据');
     return;
-  }else if(multipleSelection.value.length > 1){
+  } else if (multipleSelection.value.length > 1) {
     ElMessage.warning('只能选择一条数据');
     return;
   }
   dialogUpdatePassWordVisible.value = true;
-  updatePassWordFormData.value = {"id":multipleSelection.value[0].id};
+  updatePassWordFormData.value = {"id": multipleSelection.value[0].id};
 }
 
 const onDelete = () => {
-  if(multipleSelection.value.length == 0){
+  if (multipleSelection.value.length == 0) {
     ElMessage.warning('请选择数据');
     return;
   }
@@ -312,7 +323,7 @@ const onDelete = () => {
 }
 
 const onAddSubmit = () => {
-  if(!addRuleFormRef) return;
+  if (!addRuleFormRef) return;
   addRuleFormRef.value.validate(async (valid) => {
     if (valid) {
       sysUserApi.add(addFormData.value).then((res) => {
@@ -327,7 +338,7 @@ const onAddSubmit = () => {
 }
 
 const onUpdateSubmit = () => {
-  if(!updateRuleFormRef) return;
+  if (!updateRuleFormRef) return;
   updateRuleFormRef.value.validate(async (valid) => {
     if (valid) {
       sysUserApi.update(updateFormData.value).then((res) => {
@@ -342,7 +353,7 @@ const onUpdateSubmit = () => {
 }
 
 const onUpdatePassWordSubmit = () => {
-  if(!updatePassWordRuleFormRef) return;
+  if (!updatePassWordRuleFormRef) return;
   updatePassWordRuleFormRef.value.validate(async (valid) => {
     if (valid) {
       sysUserApi.update(updatePassWordFormData.value).then((res) => {

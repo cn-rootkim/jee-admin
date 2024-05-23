@@ -1,6 +1,6 @@
 <template>
   <el-main>
-    <el-form :inline="true" style="text-align: left;" :model="formData" ref="formRef" >
+    <el-form :inline="true" style="text-align: left;" :model="formData" ref="formRef">
       <el-form-item label="角色名">
         <el-input clearable v-model="formData.name" style="width: 170px;"/>
       </el-form-item>
@@ -22,21 +22,26 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" />
-      <el-table-column property="name" label="角色名" width="220" />
-      <el-table-column property="description" label="备注" show-overflow-tooltip />
-      <el-table-column property="createTime" label="创建时间" />
-      <el-table-column property="createrName" label="创建人" />
+      <el-table-column type="selection" width="55"/>
+      <el-table-column property="name" label="角色名" width="220"/>
+      <el-table-column property="roleKey" label="角色key" width="220"/>
+      <el-table-column property="description" label="备注" show-overflow-tooltip/>
+      <el-table-column property="createTime" label="创建时间"/>
+      <el-table-column property="createrName" label="创建人"/>
       <el-table-column property="updateTime" label="修改时间"/>
-      <el-table-column property="updaterName" label="修改人" />
+      <el-table-column property="updaterName" label="修改人"/>
     </el-table>
     <el-pagination style="margin-top: 10px;" :current-page="currentPage" :page-size="pageSize"
-                   background layout="total, prev, pager, next, jumper" :total="total" @current-change="handleCurrentChange"/>
+                   background layout="total, prev, pager, next, jumper" :total="total"
+                   @current-change="handleCurrentChange"/>
 
     <el-dialog v-model="dialogAddVisible" title="新增" width="500" destroy-on-close :close-on-click-modal="false">
       <el-form :model="addFormData" style="margin-left: 60px" :rules="addRules" ref="addRuleFormRef">
         <el-form-item label="角色名" :label-width="addFormLabelWidth" prop="name">
           <el-input v-model="addFormData.name" autocomplete="off" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="角色Key" :label-width="addFormLabelWidth" prop="roleKey">
+          <el-input v-model="addFormData.roleKey" autocomplete="off" style="width: 200px;"/>
         </el-form-item>
         <el-form-item label="备注" :label-width="addFormLabelWidth">
           <el-input v-model="addFormData.description" autocomplete="off" style="width: 200px;"/>
@@ -56,6 +61,9 @@
         <el-form-item label="角色名" :label-width="updateFormLabelWidth" prop="name">
           <el-input v-model="updateFormData.name" autocomplete="off" style="width: 200px;"/>
         </el-form-item>
+        <el-form-item label="角色Key" :label-width="updateFormLabelWidth" prop="roleKey">
+          <el-input v-model="updateFormData.roleKey" autocomplete="off" style="width: 200px;"/>
+        </el-form-item>
         <el-form-item label="备注" :label-width="updateFormLabelWidth">
           <el-input v-model="updateFormData.description" autocomplete="off" style="width: 200px;"/>
         </el-form-item>
@@ -69,7 +77,8 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="dialogMenuAuthVisible" title="菜单授权" width="500" destroy-on-close :close-on-click-modal="false">
+    <el-dialog v-model="dialogMenuAuthVisible" title="菜单授权" width="500" destroy-on-close
+               :close-on-click-modal="false">
       <el-tree
           ref="refListTree"
           style="width: 100%;"
@@ -89,7 +98,8 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="dialogFunctionAuthVisible" title="功能授权" width="500" :close-on-click-modal="false" destroy-on-close>
+    <el-dialog v-model="dialogFunctionAuthVisible" title="功能授权" width="500" :close-on-click-modal="false"
+               destroy-on-close>
       <el-row>
         <el-col :span="12">
           <el-tree
@@ -109,8 +119,8 @@
               @select="onFunctionAuthSelect"
               @selectAll="onFunctionAuthSelectAll"
           >
-            <el-table-column type="selection" />
-            <el-table-column property="name" label="功能名称" />
+            <el-table-column type="selection"/>
+            <el-table-column property="name" label="功能名称"/>
             <el-table-column property="adminMenuName" label="归属菜单"/>
           </el-table>
         </el-col>
@@ -124,7 +134,8 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="dialogApiAuthVisible" title="接口授权" width="500" destroy-on-close :close-on-click-modal="false">
+    <el-dialog v-model="dialogApiAuthVisible" title="接口授权" width="500" destroy-on-close
+               :close-on-click-modal="false">
       <el-tree
           style="width: 100%;"
           ref="refApiAuthListTree"
@@ -136,24 +147,24 @@
       >
         <template #default="{ node, data }">
       <span class="custom-tree-node">
-          <span>{{ node.label }}【{{data.description}}】</span>
+          <span>{{ node.label }}【{{ data.description }}】</span>
       </span>
         </template>
       </el-tree>
-        <template #footer>
-          <div class="dialog-footer">
-            <el-button @click="dialogApiAuthVisible = false">取消</el-button>
-            <el-button type="primary" @click="onApiAuthSubmit">
-              保存
-            </el-button>
-          </div>
-        </template>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogApiAuthVisible = false">取消</el-button>
+          <el-button type="primary" @click="onApiAuthSubmit">
+            保存
+          </el-button>
+        </div>
+      </template>
     </el-dialog>
   </el-main>
 </template>
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
-import { ElTable,ElForm,ElMessage,ElMessageBox } from 'element-plus'
+import {ElTable, ElForm, ElMessage, ElMessageBox} from 'element-plus'
 import sysRoleApi from "../../api/sys/sysRole.js";
 import adminMenuApi from "../../api/admin/adminMenu.js";
 import adminMenuFunctionApi from "../../api/admin/adminMenuFunction.js";
@@ -162,7 +173,7 @@ import sysApi from "../../api/sys/sysApi.js";
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref([]);
-const tableData =ref();
+const tableData = ref();
 const formData = ref({
   name: null
 });
@@ -175,26 +186,30 @@ const addFormLabelWidth = ref('80px');
 const updateFormLabelWidth = ref('80px');
 const addRuleFormRef = ref();
 const addRules = reactive({
-  name: [{ required: true, message: "请输入角色名", trigger: "blur" }],
+  name: [{required: true, message: "请输入角色名", trigger: "blur"}],
+  roleKey: [{required: true, message: "请输入角色key", trigger: "blur"}],
 });
 const updateRuleFormRef = ref();
 const updateRules = reactive({
-  name: [{ required: true, message: "请输入角色名", trigger: "blur" }],
+  name: [{required: true, message: "请输入角色名", trigger: "blur"}],
+  roleKey: [{required: true, message: "请输入角色key", trigger: "blur"}],
 });
 const addFormData = ref({
   name: null,
+  roleKey: null,
   description: null,
 });
 const updateFormData = ref({
   id: null,
   name: null,
+  roleKey: null,
   description: null,
 });
 const handleSelectionChange = (val: []) => {
   multipleSelection.value = val
 }
 
-const fetchListData = async (current:number) => {
+const fetchListData = async (current: number) => {
   const listData = await sysRoleApi.page({current: current, size: pageSize.value, name: formData.value.name});
   total.value = listData.data.total;
   currentPage.value = current;
@@ -206,10 +221,6 @@ const defaultProps = {
   value: 'id'
 }
 const adminMenuTreeData = ref(null);
-const fetchAdminMenuTreeData = async () => {
-  const adminMenu = await adminMenuApi.listTree();
-  adminMenuTreeData.value = adminMenu.data;
-};
 const onAddDisabled = ref(true);
 const onDeleteDisabled = ref(true);
 const onUpdateDisabled = ref(true);
@@ -217,34 +228,35 @@ const onMenuAuthDisabled = ref(true);
 const onFunctionAuthDisabled = ref(true);
 const onApiAuthDisabled = ref(true);
 onMounted(() => {
-  const funNameListAuthorizedStr = sessionStorage.getItem("funNameListAuthorized");
-  if(funNameListAuthorizedStr!=null && funNameListAuthorizedStr!=''){
-    const funNameListAuthorized = JSON.parse(funNameListAuthorizedStr);
-    funNameListAuthorized.forEach(item =>{
-      switch (item) {
-        case '新增':
-          onAddDisabled.value = false;
-          break;
-        case '删除':
-          onDeleteDisabled.value = false;
-          break;
-        case '修改':
-          onUpdateDisabled.value = false;
-          break;
-        case '菜单授权':
-          onMenuAuthDisabled.value = false;
-          break;
-        case '功能授权':
-          onFunctionAuthDisabled.value = false;
-          break;
-        case '接口授权':
-          onApiAuthDisabled.value = false;
-          break;
+  const functionListStr = sessionStorage.getItem("functionList");
+  if (functionListStr != null && functionListStr != '') {
+    const functionList = JSON.parse(functionListStr);
+    functionList.forEach(item => {
+      if (item.isAuth) {
+        switch (item.name) {
+          case '新增':
+            onAddDisabled.value = false;
+            break;
+          case '删除':
+            onDeleteDisabled.value = false;
+            break;
+          case '修改':
+            onUpdateDisabled.value = false;
+            break;
+          case '菜单授权':
+            onMenuAuthDisabled.value = false;
+            break;
+          case '功能授权':
+            onFunctionAuthDisabled.value = false;
+            break;
+          case '接口授权':
+            onApiAuthDisabled.value = false;
+            break;
+        }
       }
     })
   }
   fetchListData(1);
-  fetchAdminMenuTreeData();
 });
 const handleCurrentChange = (val) => {
   currentPage.value = val;
@@ -263,10 +275,10 @@ const onAdd = () => {
   dialogAddVisible.value = true;
 }
 const onUpdate = async () => {
-  if(multipleSelection.value.length == 0){
+  if (multipleSelection.value.length == 0) {
     ElMessage.warning('请选择一条数据');
     return;
-  }else if(multipleSelection.value.length > 1){
+  } else if (multipleSelection.value.length > 1) {
     ElMessage.warning('只能选择一条数据');
     return;
   }
@@ -274,7 +286,7 @@ const onUpdate = async () => {
   updateFormData.value = {...multipleSelection.value[0]};
 }
 const onDelete = () => {
-  if(multipleSelection.value.length == 0){
+  if (multipleSelection.value.length == 0) {
     ElMessage.warning('请选择数据');
     return;
   }
@@ -291,7 +303,7 @@ const onDelete = () => {
   });
 }
 const onAddSubmit = () => {
-  if(!addRuleFormRef) return;
+  if (!addRuleFormRef) return;
   addRuleFormRef.value.validate(async (valid) => {
     if (valid) {
       sysRoleApi.add(addFormData.value).then((res) => {
@@ -305,7 +317,7 @@ const onAddSubmit = () => {
   });
 }
 const onUpdateSubmit = () => {
-  if(!updateRuleFormRef) return;
+  if (!updateRuleFormRef) return;
   updateRuleFormRef.value.validate(async (valid) => {
     if (valid) {
       sysRoleApi.update(updateFormData.value).then((res) => {
@@ -320,66 +332,74 @@ const onUpdateSubmit = () => {
 }
 const dialogMenuAuthVisible = ref(false);
 const authRoleId = ref(null);
-const menuAuthCheckedKeys = ref(null);
+const menuAuthCheckedKeys = ref([]);
 const onMenuAuth = async () => {
-  if(multipleSelection.value.length == 0){
+  if (multipleSelection.value.length == 0) {
     ElMessage.warning('请选择一条数据');
     return;
-  }else if(multipleSelection.value.length > 1){
+  } else if (multipleSelection.value.length > 1) {
     ElMessage.warning('只能选择一条数据');
     return;
   }
   authRoleId.value = multipleSelection.value[0].id;
-  const adminMenuListAll = await adminMenuApi.listAuthorized({'sysRoleId':authRoleId.value});
-  menuAuthCheckedKeys.value = adminMenuListAll.data.map(item => item.id);
+  const adminMenuListAll = await adminMenuApi.listTree({'mode': 1, 'roleId': authRoleId.value});
+  adminMenuTreeData.value = adminMenuListAll.data;
+  menuAuthCheckedKeys.value = [];
+  adminMenuListAll.data.forEach(item => {
+    recursionMenuAuth(item);
+  });
   dialogMenuAuthVisible.value = true;
 }
+const recursionMenuAuth = (adminMenu:any) => {
+  if(adminMenu.isAuth){
+    menuAuthCheckedKeys.value.push(adminMenu.id);
+  }
+  if(adminMenu.childList!=null && adminMenu.childList.length > 0){
+    adminMenu.childList.forEach(item => {
+      recursionMenuAuth(item);
+    })
+  }
+}
 const refListTree = ref();
-const onMenuAuthSubmit = async () =>{
-  await sysRoleApi.authAdminMenu({sysRoleId: authRoleId.value, adminMenuIdList: refListTree.value.getCheckedKeys()});
+const onMenuAuthSubmit = async () => {
+  await sysRoleApi.authMenu({roleId: authRoleId.value, menuIdList: refListTree.value.getCheckedKeys()});
   ElMessage.success('授权成功');
   dialogMenuAuthVisible.value = false;
 }
 const dialogFunctionAuthVisible = ref(false);
-const onFunctionAuth = () => {
-  if(multipleSelection.value.length == 0){
+const functionTableData = ref();
+const onFunctionAuth = async() => {
+  if (multipleSelection.value.length == 0) {
     ElMessage.warning('请选择一条数据');
     return;
-  }else if(multipleSelection.value.length > 1){
+  } else if (multipleSelection.value.length > 1) {
     ElMessage.warning('只能选择一条数据');
     return;
   }
   authRoleId.value = multipleSelection.value[0].id;
+  const adminMenuListAll = await adminMenuApi.listTree({'mode': 0});
+  adminMenuTreeData.value = adminMenuListAll.data;
+  functionTableData.value = [];
   dialogFunctionAuthVisible.value = true;
 }
-const funIdListAuthorized = ref();
-const fetchFunIdListAuthorized = async () => {
-  const idListAuthorized = await adminMenuFunctionApi.idListAuthorized({sysRoleId: authRoleId.value,adminMenuId: checkedAdminMenuId.value});
-  funIdListAuthorized.value = idListAuthorized.data;
-}
-const functionTableData = ref();
 const checkedAdminMenuId = ref();
 const handleNodeClick = (data: any) => {
-  if(!data.childList){
+  if (!data.childList) {
     checkedAdminMenuId.value = data.id;
     fetchAdminMenuFunctionData();
-    fetchFunIdListAuthorized();
   }
 }
 const multipleFunctionTableRef = ref();
 const fetchAdminMenuFunctionData = async () => {
-  const adminMenuFunctionList = await adminMenuFunctionApi.list({adminMenuId: checkedAdminMenuId.value});
+  const adminMenuFunctionList = await adminMenuFunctionApi.list({mode:1,adminMenuId: checkedAdminMenuId.value,roleId:authRoleId.value});
   functionTableData.value = adminMenuFunctionList.data;
   setTimeout(() => {
     functionTableData.value.forEach(item => {
-      for(let i = 0; i < funIdListAuthorized.value.length; i++){
-        if(item.id == funIdListAuthorized.value[i]){
-          multipleFunctionTableRef.value.toggleRowSelection(item,true);
-          item.isAuthorized = 0;
-          break;
-        }
+      if (item.isAuth) {
+        multipleFunctionTableRef.value.toggleRowSelection(item, true);
+        item.isAuthorized = 0;
       }
-      if(item.isAuthorized==null){
+      if (item.isAuthorized == null) {
         item.isAuthorized = 1;
       }
     });
@@ -393,20 +413,20 @@ const onFunctionAuthSubmit = async () => {
   ElMessage.success('保存成功');
   dialogFunctionAuthVisible.value = false;
 }
-const onFunctionAuthSelect = async(selection, row) => {
+const onFunctionAuthSelect = async (selection, row) => {
   const adminMenuFunctionIdList = [];
   selection.forEach(item => {
     adminMenuFunctionIdList.push(item.id);
   });
-  await sysRoleApi.authAdminMenuFunction({
-    sysRoleId: authRoleId.value,
-    adminMenuId: checkedAdminMenuId.value,
-    adminMenuFunctionIdList:adminMenuFunctionIdList
+  await sysRoleApi.authMenuFunction({
+    roleId: authRoleId.value,
+    menuId: checkedAdminMenuId.value,
+    menuFunctionIdList: adminMenuFunctionIdList
   }).then((res) => {
     ElMessage.success('授权成功');
   });
 }
-const onFunctionAuthSelectAll = async(selection) => {
+const onFunctionAuthSelectAll = async (selection) => {
   const adminMenuFunctionIdList = [];
   selection.forEach(item => {
     adminMenuFunctionIdList.push(item.id);
@@ -414,7 +434,7 @@ const onFunctionAuthSelectAll = async(selection) => {
   await sysRoleApi.authAdminMenuFunction({
     sysRoleId: authRoleId.value,
     adminMenuId: checkedAdminMenuId.value,
-    adminMenuFunctionIdList:adminMenuFunctionIdList
+    adminMenuFunctionIdList: adminMenuFunctionIdList
   }).then((res) => {
     ElMessage.success('授权成功');
   });
@@ -422,25 +442,31 @@ const onFunctionAuthSelectAll = async(selection) => {
 const dialogApiAuthVisible = ref(false);
 const apiAuthTreeData = ref();
 const defaultApiAuthProps = {
-  children: 'sysApiDTOList',
+  children: 'sysApiBOList',
   label: 'api',
 }
-const apiAuthCheckedKeys = ref();
+const apiAuthCheckedKeys = ref([]);
 const onApiAuth = async () => {
-  if(multipleSelection.value.length == 0){
+  if (multipleSelection.value.length == 0) {
     ElMessage.warning('请选择一条数据');
     return;
-  }else if(multipleSelection.value.length > 1){
+  } else if (multipleSelection.value.length > 1) {
     ElMessage.warning('只能选择一条数据');
     return;
   }
   authRoleId.value = multipleSelection.value[0].id;
-  const sysApiBasePathList = await sysApiBasePath.listWithApiList();
+  const sysApiBasePathList = await sysApiBasePath.list({'isNeedApiList':true, 'roleId': authRoleId.value});
   sysApiBasePathList.data.forEach(item => {
     item.api = item.basePath;
   })
-  const idListAuthorized = await sysApi.idListAuthorized({sysRoleId: authRoleId.value});
-  apiAuthCheckedKeys.value = idListAuthorized.data;
+  apiAuthCheckedKeys.value = [];
+  sysApiBasePathList.data.forEach(item => {
+    item.sysApiBOList.forEach(itemApi => {
+      if(itemApi.isAuth){
+        apiAuthCheckedKeys.value.push(itemApi.id);
+      }
+    })
+  });
   apiAuthTreeData.value = sysApiBasePathList.data;
   dialogApiAuthVisible.value = true;
 }
@@ -448,11 +474,11 @@ const refApiAuthListTree = ref();
 const onApiAuthSubmit = async () => {
   const sysApiIdList = [];
   refApiAuthListTree.value.getCheckedNodes().forEach(item => {
-    if(item.sysApiBasePathId!=null){
+    if (item.sysApiBasePathId != null) {
       sysApiIdList.push(item.id);
     }
   })
-  await sysRoleApi.authSysApi({sysRoleId: authRoleId.value, sysApiIdList: sysApiIdList});
+  await sysRoleApi.authApi({roleId: authRoleId.value, apiIdList: sysApiIdList});
   ElMessage.success('授权成功');
   dialogApiAuthVisible.value = false;
 }

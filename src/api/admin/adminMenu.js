@@ -9,24 +9,12 @@ const batchDelete = (data) => {
 const update = (data) => {
     return http.post('/adminMenu/update', data)
 }
-const listTree = () => {
-    return http.post('/adminMenu/listTree')
-}
-const list = () => {
-    return http.post('/adminMenu/list')
-}
-const listAuthorized = (data) => {
-    return http.post('/adminMenu/listAuthorized',data)
-}
-const listTreeAuthorized = () => {
-    return http.post('/adminMenu/listTreeAuthorized')
+const listTree = (data) => {
+    return http.post('/adminMenu/listTree', data)
 }
 export default {
     add,
     batchDelete,
     update,
     listTree,
-    list,
-    listAuthorized,
-    listTreeAuthorized
 }
