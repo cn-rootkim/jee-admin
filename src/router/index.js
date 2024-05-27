@@ -51,12 +51,28 @@ const routes = [
                     title: '接口管理'
                 },
                 component: () => import('../views/sys/SysApi.vue')
+            },
+            {
+                path: '/blog/blog',
+                name: '博客管理',
+                meta: {
+                    title: '博客管理'
+                },
+                component: () => import('../views/blog/Blog.vue')
+            },
+            {
+                path: '/blog/blogType',
+                name: '分类管理',
+                meta: {
+                    title: '分类管理'
+                },
+                component: () => import('../views/blog/BlogType.vue')
             }
         ]
     }
 ]
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory('/blog-admin/'),
     routes,
 })
 //挂载路由导航守卫
