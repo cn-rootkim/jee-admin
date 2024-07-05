@@ -4,8 +4,8 @@ import router from "../../router/index.js";
 //1.创建axios实例
 const instance = axios.create({
     // baseURL: "http://localhost:9000/base-service",
-    //   baseURL: "http://localhost:9001",
-    baseURL: "https://rootkim.net/rootkim-blog-api",
+      baseURL: "http://localhost:9001",
+    // baseURL: "https://rootkim.net/rootkim-blog-api",
     timeout: 50000,
 });
 

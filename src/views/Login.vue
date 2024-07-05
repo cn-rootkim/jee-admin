@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-container style="width: 30%; margin-left: auto; margin-right: auto; margin-top: 10%;">
+    <el-container style="width: 30%;  margin-left: auto; margin-right: auto; padding-top: 10%;">
       <el-header>
         <div style="width: 400px;">
           <p style="float: left;">

@@ -63,7 +63,7 @@ const recursionRmNoAuth = (adminMenuList) => {
     if (adminMenuList[i].isAuth == null || !adminMenuList[i].isAuth) {
       adminMenuList.splice(adminMenuList.indexOf(adminMenuList[i]), 1);
     } else {
-      if(adminMenuList[i].childList!=null){
+      if (adminMenuList[i].childList != null) {
         recursionRmNoAuth(adminMenuList[i].childList);
       }
     }
@@ -85,7 +85,7 @@ const onLogout = async () => {
   await sysUserApi.logout();
   sessionStorage.clear();
   ElMessage.success("退出成功");
-  router.push({path: "/login"});
+  await router.push({path: "/login"});
 };
 onMounted(() => {
   fetchAdminMenuData();

@@ -19,24 +19,7 @@
       </span>
     </template>
   </el-tree>
-  <el-dialog v-model="dialogAddSysApiBasePathVisible" title="新增父路径" width="500" destroy-on-close :close-on-click-modal="false">
-    <el-form :model="addSysApiBasePathFormData" style="margin-left: 60px" :rules="addSysApiBasePathRules" ref="addSysApiBasePathRuleFormRef">
-      <el-form-item label="父路径名称" :label-width="addSysApiBasePathFormLabelWidth" prop="basePath">
-        <el-input v-model="addSysApiBasePathFormData.basePath" autocomplete="off" style="width: 200px;"/>
-      </el-form-item>
-      <el-form-item label="备注" :label-width="addSysApiBasePathFormLabelWidth" prop="description">
-        <el-input v-model="addSysApiBasePathFormData.description" autocomplete="off" style="width: 200px;"/>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="dialogAddSysApiBasePathVisible = false">取消</el-button>
-        <el-button type="primary" @click="onAddSysApiBasePathSubmit">
-          保存
-        </el-button>
-      </div>
-    </template>
-  </el-dialog>
+  <sysApiBasePathAdd :dialogAddSysApiBasePathVisible="dialogAddSysApiBasePathVisible" :addSysApiBasePathFormData="addSysApiBasePathFormData" @success="addSysApiBasePathSuccess"></sysApiBasePathAdd>
   <el-dialog v-model="dialogUpdateSysApiBasePathVisible" title="修改父路径" width="500" destroy-on-close :close-on-click-modal="false">
     <el-form :model="updateSysApiBasePathFormData" style="margin-left: 60px" :rules="updateSysApiBasePathRules" ref="updateSysApiBasePathRuleFormRef">
       <el-form-item label="父路径名称" :label-width="updateSysApiBasePathFormLabelWidth" prop="basePath">
@@ -118,6 +101,7 @@ import {onMounted, reactive, ref} from 'vue'
 import {ElForm, ElMessage, ElMessageBox, ElTable} from 'element-plus'
 import sysApi from '../../api/sys/sysApi.js'
 import sysApiBasePath from '../../api/sys/sysApiBasePath.js'
+import sysApiBasePathAdd from '../../components/sys/apiBasePath/Add.vue';
 
 const treeData = ref([]);
 const refListTree = ref()
@@ -161,18 +145,17 @@ onMounted(() => {
   }
   fetchData()
 })
+const addSysApiBasePathSuccess = () => {
+  dialogAddSysApiBasePathVisible.value = false;
+  fetchData();
+}
 const dialogAddSysApiBasePathVisible = ref(false);
 const dialogUpdateSysApiBasePathVisible = ref(false);
 const dialogAddSysApiVisible = ref(false);
 const dialogUpdateSysApiVisible = ref(false);
-const addSysApiBasePathFormLabelWidth = ref('100px');
 const updateSysApiBasePathFormLabelWidth = ref('100px');
 const addSysApiFormLabelWidth = ref('80px');
 const updateSysApiFormLabelWidth = ref('80px');
-const addSysApiBasePathRuleFormRef = ref();
-const addSysApiBasePathRules = reactive({
-  basePath: [{ required: true, message: "请输入父路径名称", trigger: "blur" }],
-});
 const updateSysApiBasePathRuleFormRef = ref();
 const updateSysApiBasePathRules = reactive({
   basePath: [{ required: true, message: "请输入父路径名称", trigger: "blur" }],
@@ -259,25 +242,13 @@ const onDelete = () => {
   }).catch(() => {
   });
 }
-const onAddSysApiBasePathSubmit = () => {
-  addSysApiBasePathRuleFormRef.value.validate(async (valid) => {
-    if (valid) {
-      await sysApiBasePath.add(addSysApiBasePathFormData.value);
-      ElMessage.success("新增成功");
-      dialogAddSysApiBasePathVisible.value = false;
-      fetchData();
-    } else {
-      return false;
-    }
-  });
-};
 const onUpdateSysApiBasePathSubmit = () => {
   updateSysApiBasePathRuleFormRef.value.validate(async (valid) => {
     if (valid) {
       await sysApiBasePath.update(updateSysApiBasePathFormData.value);
       ElMessage.success("修改成功");
       dialogUpdateSysApiBasePathVisible.value = false;
-      fetchData();
+      await fetchData();
     } else {
       return false;
     }

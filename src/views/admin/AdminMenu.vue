@@ -52,121 +52,15 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-dialog v-model="dialogAddMenuVisible" title="新增菜单" width="500" destroy-on-close
-               :close-on-click-modal="false">
-      <el-form :model="addMenuFormData" style="margin-left: 60px" :rules="addMenuRules" ref="addMenuRuleFormRef">
-        <el-form-item label="菜单名称" :label-width="addMenuFormLabelWidth" prop="name">
-          <el-input v-model="addMenuFormData.name" autocomplete="off" style="width: 200px;"/>
-        </el-form-item>
-        <el-form-item label="菜单路径" :label-width="addMenuFormLabelWidth">
-          <el-input v-model="addMenuFormData.path" autocomplete="off" style="width: 200px;"/>
-        </el-form-item>
-        <el-form-item label="父级菜单" :label-width="addMenuFormLabelWidth">
-          <el-tree-select
-              v-model="addMenuFormData.parentId"
-              :data="adminMenuData"
-              check-strictly
-              :render-after-expand="false"
-              :props="defaultProps"
-              style="width: 200px"
-              clearable
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogAddMenuVisible = false">取消</el-button>
-          <el-button type="primary" @click="onAddMenuSubmit">
-            保存
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
-    <el-dialog v-model="dialogUpdateMenuVisible" title="修改菜单" width="500" destroy-on-close
-               :close-on-click-modal="false">
-      <el-form :model="updateMenuFormData" style="margin-left: 60px" :rules="updateMenuRules"
-               ref="updateMenuRuleFormRef">
-        <el-form-item label="菜单名称" :label-width="updateMenuFormLabelWidth" prop="name">
-          <el-input v-model="updateMenuFormData.name" autocomplete="off" style="width: 200px;"/>
-        </el-form-item>
-        <el-form-item label="菜单路径" :label-width="updateMenuFormLabelWidth">
-          <el-input v-model="updateMenuFormData.path" autocomplete="off" style="width: 200px;"/>
-        </el-form-item>
-        <el-form-item label="父级菜单" :label-width="updateMenuFormLabelWidth">
-          <el-tree-select
-              v-model="updateMenuFormData.parentId"
-              :data="adminMenuData"
-              check-strictly
-              :render-after-expand="false"
-              :props="defaultProps"
-              style="width: 200px"
-              clearable
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogUpdateMenuVisible = false">取消</el-button>
-          <el-button type="primary" @click="onUpdateMenuSubmit">
-            保存
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
-    <el-dialog v-model="dialogAddFunctionVisible" title="新增功能" width="500" destroy-on-close
-               :close-on-click-modal="false">
-      <el-form :model="addFunctionFormData" style="margin-left: 60px" :rules="addFunctionRules"
-               ref="addFunctionRuleFormRef">
-        <el-form-item label="功能名称" :label-width="addFunctionFormLabelWidth" prop="name">
-          <el-input v-model="addFunctionFormData.name" autocomplete="off" style="width: 200px;"/>
-        </el-form-item>
-        <el-form-item label="归属菜单" :label-width="addFunctionFormLabelWidth" prop="adminMenuId">
-          <el-tree-select
-              v-model="addFunctionFormData.adminMenuId"
-              :data="adminMenuData"
-              check-strictly
-              :render-after-expand="false"
-              :props="defaultProps"
-              style="width: 200px"
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogAddFunctionVisible = false">取消</el-button>
-          <el-button type="primary" @click="onAddFunctionSubmit">
-            保存
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
-    <el-dialog v-model="dialogUpdateFunctionVisible" title="修改功能" width="500" destroy-on-close
-               :close-on-click-modal="false">
-      <el-form :model="updateFunctionFormData" style="margin-left: 60px" :rules="updateFunctionRules"
-               ref="updateFunctionRuleFormRef">
-        <el-form-item label="功能名称" :label-width="updateFunctionFormLabelWidth" prop="name">
-          <el-input v-model="updateFunctionFormData.name" autocomplete="off" style="width: 200px;"/>
-        </el-form-item>
-        <el-form-item label="归属菜单" :label-width="updateFunctionFormLabelWidth" prop="adminMenuId">
-          <el-tree-select
-              v-model="updateFunctionFormData.adminMenuId"
-              :data="adminMenuData"
-              check-strictly
-              :render-after-expand="false"
-              :props="defaultProps"
-              style="width: 200px"
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogUpdateFunctionVisible = false">取消</el-button>
-          <el-button type="primary" @click="onUpdateFunctionSubmit">
-            保存
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
+    <menuAdd :dialogAddMenuVisible="dialogAddMenuVisible" :addMenuFormData="addMenuFormData" @success="addMenuSuccess"
+             :adminMenuData="adminMenuData"></menuAdd>
+    <menuUpdate :dialogUpdateMenuVisible="dialogUpdateMenuVisible" :updateMenuFormData="updateMenuFormData"
+                @success="updateMenuSuccess" :adminMenuData="adminMenuData"></menuUpdate>
+    <menuFunctionAdd :dialogAddFunctionVisible="dialogAddFunctionVisible" :addFunctionFormData="addFunctionFormData"
+                     :adminMenuData="adminMenuData" @success="addFunctionSuccess"></menuFunctionAdd>
+    <menuFunctionUpdate :dialogUpdateFunctionVisible="dialogUpdateFunctionVisible"
+                        :updateFunctionFormData="updateFunctionFormData" :adminMenuData="adminMenuData"
+                        @success="updateFunctionSuccess"></menuFunctionUpdate>
   </el-main>
 </template>
 <script lang="ts" setup>
@@ -174,27 +68,32 @@ import {onMounted, reactive, ref} from 'vue'
 import adminMenuApi from "../../api/admin/adminMenu.js";
 import adminMenuFunctionApi from "../../api/admin/adminMenuFunction.js";
 import {ElForm, ElMessage, ElMessageBox, ElTable} from 'element-plus'
+import menuAdd from '../../components/admin/menu/Add.vue';
+import menuUpdate from '../../components/admin/menu/Update.vue';
+import menuFunctionAdd from '../../components/admin/menuFunction/Add.vue';
+import menuFunctionUpdate from '../../components/admin/menuFunction/Update.vue';
 
-const defaultProps = {
+//---------------------------------------------------------主页面处理---------------------------------------------------------
+const defaultProps = {//菜单树数据属性
   children: 'childList',
   label: 'name',
   value: 'id'
 }
-const adminMenuData = ref([]);
-const tableData = ref([]);
-const checkedAdminMenu = ref({
+const adminMenuData = ref([]);//菜单树数据
+const tableData = ref([]);//菜单功能列表数据
+const clickedAdminMenu = ref({//点击的菜单数据
   id: null,
   name: null,
   path: null,
   parentId: null,
 });
-const handleNodeClick = (data: any) => {
+const handleNodeClick = (data: any) => {//菜单点击事件
   if (!data.childList) {
-    checkedAdminMenu.value = data;
+    clickedAdminMenu.value = data;
     fetchAdminMenuFunctionData();
   }
 }
-const fetchAdminMenuData = async () => {
+const fetchAdminMenuData = async () => {//获取菜单树数据
   const adminMenu = await adminMenuApi.listTree({mode: 0});
   adminMenuData.value = adminMenu.data;
 };
@@ -204,7 +103,7 @@ const onUpdateMenuDisabled = ref(true);
 const onAddFunctionDisabled = ref(true);
 const onDeleteFunctionDisabled = ref(true);
 const onUpdateFunctionDisabled = ref(true);
-onMounted(() => {
+onMounted(() => {//进入页面事件
   const functionListStr = sessionStorage.getItem("functionList");
   if (functionListStr != null && functionListStr != '') {
     const functionList = JSON.parse(functionListStr);
@@ -235,29 +134,17 @@ onMounted(() => {
   }
   fetchAdminMenuData();
 });
+
 const fetchAdminMenuFunctionData = async () => {
-  const adminMenuFunction = await adminMenuFunctionApi.list({"adminMenuId": checkedAdminMenu.value.id, mode: 0});
+  const adminMenuFunction = await adminMenuFunctionApi.list({"adminMenuId": clickedAdminMenu.value.id, mode: 0});
   adminMenuFunction.data.forEach(item => {
-    item.adminMenuName = checkedAdminMenu.value.name;
+    item.adminMenuName = clickedAdminMenu.value.name;
   });
   tableData.value = adminMenuFunction.data;
 };
+
 const dialogAddMenuVisible = ref(false);
 const dialogUpdateMenuVisible = ref(false);
-const addMenuFormLabelWidth = ref('80px');
-const updateMenuFormLabelWidth = ref('80px');
-const addMenuRuleFormRef = ref();
-const addMenuRules = reactive({
-  name: [{required: true, message: "请输入菜单名称", trigger: "blur"}],
-  path: [{required: true, message: "请输入菜单路径", trigger: "blur"}],
-  parentId: [{required: true, message: "请选择父级菜单", trigger: "blur"}],
-});
-const updateMenuRuleFormRef = ref();
-const updateMenuRules = reactive({
-  name: [{required: true, message: "请输入菜单名称", trigger: "blur"}],
-  path: [{required: true, message: "请输入菜单路径", trigger: "blur"}],
-  parentId: [{required: true, message: "请选择父级菜单", trigger: "blur"}],
-});
 const addMenuFormData = ref({
   name: null,
   path: null,
@@ -273,39 +160,24 @@ const onAddMenu = () => {
     name: null,
     path: null,
     parentId: null,
-  }
+  };
   dialogAddMenuVisible.value = true;
 };
 const onUpdateMenu = (data) => {
   updateMenuFormData.value = {...data};
   dialogUpdateMenuVisible.value = true;
 };
-const onAddMenuSubmit = () => {
-  addMenuRuleFormRef.value.validate(async (valid) => {
-    if (valid) {
-      await adminMenuApi.add(addMenuFormData.value);
-      ElMessage.success("新增成功");
-      dialogAddMenuVisible.value = false;
-      fetchAdminMenuData();
-      tableData.value = null;
-    } else {
-      return false;
-    }
-  });
-};
-const onUpdateMenuSubmit = () => {
-  updateMenuRuleFormRef.value.validate(async (valid) => {
-    if (valid) {
-      await adminMenuApi.update(updateMenuFormData.value);
-      ElMessage.success("修改成功");
-      dialogUpdateMenuVisible.value = false;
-      fetchAdminMenuData();
-      tableData.value = null;
-    } else {
-      return false;
-    }
-  });
-};
+const addMenuSuccess = () => {
+  dialogAddMenuVisible.value = false;
+  tableData.value = null;
+  fetchAdminMenuData();
+}
+const updateMenuSuccess = () => {
+  dialogUpdateMenuVisible.value = false;
+  tableData.value = null;
+  fetchAdminMenuData();
+}
+
 const refListTree = ref();
 const onDeleteMenu = () => {
   const menuIdList = refListTree.value.getCheckedKeys();
@@ -328,18 +200,6 @@ const onDeleteMenu = () => {
 }
 const dialogAddFunctionVisible = ref(false);
 const dialogUpdateFunctionVisible = ref(false);
-const addFunctionFormLabelWidth = ref('80px');
-const updateFunctionFormLabelWidth = ref('80px');
-const addFunctionRuleFormRef = ref();
-const addFunctionRules = reactive({
-  name: [{required: true, message: "请输入功能名称", trigger: "blur"}],
-  adminMenuId: [{required: true, message: "请选择归属菜单", trigger: "blur"}],
-});
-const updateFunctionRuleFormRef = ref();
-const updateFunctionRules = reactive({
-  name: [{required: true, message: "请输入功能名称", trigger: "blur"}],
-  adminMenuId: [{required: true, message: "请选择归属菜单", trigger: "blur"}],
-});
 const addFunctionFormData = ref({
   name: null,
   adminMenuId: null,
@@ -351,7 +211,7 @@ const updateFunctionFormData = ref({
 const onAddFunction = () => {
   addFunctionFormData.value = {
     name: null,
-    adminMenuId: checkedAdminMenu.value.id,
+    adminMenuId: clickedAdminMenu.value.id,
   }
   dialogAddFunctionVisible.value = true;
 };
@@ -367,32 +227,16 @@ const onUpdateFunction = () => {
     dialogUpdateFunctionVisible.value = true;
   }
 };
-const onAddFunctionSubmit = () => {
-  addFunctionRuleFormRef.value.validate(async (valid) => {
-    if (valid) {
-      await adminMenuFunctionApi.add(addFunctionFormData.value);
-      ElMessage.success("新增成功");
-      dialogAddFunctionVisible.value = false;
-      fetchAdminMenuFunctionData();
-      tableData.value = null;
-    } else {
-      return false;
-    }
-  });
-};
-const onUpdateFunctionSubmit = () => {
-  updateFunctionRuleFormRef.value.validate(async (valid) => {
-    if (valid) {
-      await adminMenuFunctionApi.update(updateFunctionFormData.value);
-      ElMessage.success("修改成功");
-      dialogUpdateFunctionVisible.value = false;
-      fetchAdminMenuFunctionData();
-      tableData.value = null;
-    } else {
-      return false;
-    }
-  });
-};
+const addFunctionSuccess = () => {
+  dialogAddFunctionVisible.value = false;
+  tableData.value = null;
+  fetchAdminMenuFunctionData();
+}
+const updateFunctionSuccess = () => {
+  dialogUpdateFunctionVisible.value = false;
+  tableData.value = null;
+  fetchAdminMenuFunctionData();
+}
 const multipleSelection = ref([]);
 const handleSelectionChange = (val: []) => {
   multipleSelection.value = val
